@@ -39,25 +39,16 @@ function buildQuery(partyId?: string, location?: string): Object {
     }]
 }; 
 
+  const searchRegEx = { '$regex': '.*' + (location || '') + '.*', '$options': 'i' };
+ 
+  return {$and: [{location: searchRegEx},isAvailable]};
 
+  
 if (partyId) {
     return {
-      // only single party
-      $and: [{
-          _id: partyId
-        },
-        isAvailable
-      ]
-    };
-  }
-
-  const searchRegEx = { '$regex': '.*' + (location || '') + '.*', '$options': 'i' };
-
-  return {
-    $and: [{
-        location: searchRegEx
-      },
-      isAvailable
-    ]
-  };
+      $and: [{_id: partyId},isAvailable]};
+    }
+    return isAvailable;
+  
 }
+
